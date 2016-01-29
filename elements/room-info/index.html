@@ -1,0 +1,28 @@
+<link rel=import href=../../bower_components/polymer/polymer.html>
+<link rel=import href=../user-media/index.html>
+<link rel=import href=../socket-channel/index.html>
+<link rel=import href=../peer-call-manager/index.html>
+<link rel=import href=../peer-call/index.html>
+<link rel=import href=../room-user/index.html>
+<polymer-element name="room-info">
+  <template>
+    <user-media id="userMedia"
+                audio="{{audio}}"
+                video="{{video}}"
+                stream="{{mediaStream}}"></user-media>
+    <socket-channel id="channel" namespace="room" conn="{{conn}}"></socket-channel>
+    <peer-call-manager id="peerManager"
+                       on-error="{{errLog}}"
+                       debug
+                       stream="{{mediaStream}}"
+                       peerId="{{peerId}}"
+                       calls="{{calls}}"></peer-call-manager>
+    <template repeat="{{call in calls}}">
+      <peer-call on-error="{{errLog}}" mediaConnection="{{call}}"></peer-call>
+    </template>
+    <template repeat="{{user in users}}">
+      <room-user user="{{user}}"></room-user>
+    </template>
+  </template>
+  <script src=index.js></script>
+</polymer-element>

@@ -1,0 +1,118 @@
+<link rel=import href=../../bower_components/polymer/polymer.html>
+<link rel="import" href="../../bower_components/core-icon/core-icon.html">
+<link rel="import" href="../../bower_components/core-icons/core-icons.html">
+<link rel="import" href="../../bower_components/core-iconset/core-iconset.html">
+<link rel="import" href="../../bower_components/core-iconset-svg/core-iconset-svg.html">
+<link rel="import" href="../../bower_components/core-icons/iconsets/av-icons.html">
+<link rel="import" href="../../bower_components/core-collapse/core-collapse.html">
+<link rel=import href=../../bower_components/paper-icon-button/paper-icon-button.html>
+<polymer-element name="user-video">
+  <template>
+    <style>
+      #wrapper {
+        border: solid 1px #085E55;
+        position: relative;
+      }
+      #video-wrapper {
+        background-color: black;
+        width: 200px;
+        height: 200px;
+      }
+      video { height: 200px; width: 200px; }
+      video.local { transform: scaleX(-1); -webkit-transform: scaleX(-1); }
+      #username {
+        color: white;
+        position: absolute;
+        opacity: .8;
+        top: 0;
+        left: 0;
+        margin: .5em;
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      }
+      paper-icon-button::shadow core-icon {
+        fill: white;
+        opacity: .8;
+      }
+      #sound-only-overlay {
+        position: absolute;
+        font-size: 1.3em;
+        z-index: 2;
+        top: 0;
+        left: 0;
+        background-color: black;
+        color: red;
+        font-family: Impact, Haettenschweiler, "Franklin Gothic Bold", Charcoal, "Helvetica Inserat", "Bitstream Vera Sans Bold", "Arial Black", sans serif;
+        text-transform: uppercase;
+        text-align: center;
+        vertical-align: middle;
+        margin: auto;
+        width: 100%;
+        height: 100%;
+      }
+      #sound-only-overlay > h1 {
+        font-size: 3em;
+        font-family: Consolas, monaco, monospace;
+      }
+      #sound-only-overlay > h2 {
+        font-size: 1.2em;
+      }
+      #settings {
+        bottom: 0;
+        position: absolute;
+        width: 100%;
+        z-index: 3;
+      }
+      #settings > *,
+      #settings core-collapse paper-icon-button {
+        display: inline-block;
+      }
+    </style>
+    <div id="wrapper">
+      <p id="username">{{user.name}}<template if="{{user.isLocal}}"> (You)</template></p>
+      <div id="video-wrapper">
+        <!-- Have to do it this way because ?= is buggy on firefox. Sigh -->
+        <template if="{{user.isLocal}}">
+          <video muted
+                 autoplay
+                 class="local"
+                 src="{{user.stream | streamUrl}}">
+          </video>
+        </template>
+        <template if="{{!user.isLocal}}">
+          <video autoplay
+                 class="remote"
+                 src="{{user.stream | streamUrl}}">
+          </video>
+        </template>
+        <template if="{{!user.video || !user.videoAvailable}}">
+          <div id=sound-only-overlay>
+            <!--
+            <h2>{{user.name}}</h4>
+            <h1>01</h1>
+            -->
+            <h2>Sound</h4>
+            <h2>Only</h$>
+          </div>
+        </template>
+        <div id=settings>
+          <paper-icon-button id="settings-toggle"
+                             icon="settings"
+                             on-click="{{toggleSettings}}"></paper-icon-button>
+          <div>
+            <core-collapse id="settingsCollapse">
+              <paper-icon-button id="video-control"
+                                 icon="{{user.video && user.videoAvailable | videoIcon}}"
+                                 on-click="{{toggleVideo}}">
+              </paper-icon-button>
+              <paper-icon-button id="audio-control"
+                                 icon="{{user.audio && user.audioAvailable | audioIcon}}"
+                                 on-click="{{toggleAudio}}">
+              </paper-icon-button>
+            </core-collapse>
+          </div>
+        </div>
+      </div>
+    </div>
+  </template>
+  <script src=index.js></script>
+</polymer-element>
