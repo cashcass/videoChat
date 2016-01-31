@@ -1,7 +1,10 @@
 # videoChat
-PeerJS  workout  with friends
+Still setting up a peer server
 
-Install dependencies:
+##Setup
+`npm i && bower i`
 
-npm i && bower i
+`sudo npm install -g gulp`
+
+`gulp dev`
 
